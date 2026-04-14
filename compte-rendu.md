@@ -27,6 +27,7 @@
 
 Selon la [doc flask](https://flask.palletsprojects.com/en/stable/testing/), une fixture a pour but d'écrire du code
 réutilisable pour les tests.
+
 La fonction `app.test_client()` quant à elle permet faire une requête à l'application
 sans démarrer le serveur, ce qui a pour avantage de faire remonter les erreurs
 directement.
@@ -35,21 +36,58 @@ directement.
 
 #### Pourquoi est-il important de tester localement avant de pousser ? Que se passe-t-il si un test échoue dans la CI ? <!-- rumdl-disable-line MD013 -->
 
+Le test local est important pour éviter de pousser du code invalide.
+Si un test échoue dans une CI, deux choses peuvent se passer:
+
+- Si configuré comme non-bloquant, la CI donne un avertissement mais continue son
+  exécution
+- Si configuré comme bloquant (comportement par défaut) alors la CI échoue, il faudra
+  alors résoudre via un commit supplémentaire le problème
+
 ## Partie 3 — Couverture de code et artefacts
 
 ### Question 4
 
 #### Qu'est-ce qu'un artefact GitHub Actions ? Donnez 3 exemples d'artefacts utiles
 
+L'intérêt d'un artefact GitHub est de persister les données choisies à la fin
+d'un job, le conteneur étant détruit à la fin de l'exécution.
+
+Cet artefact peut-être ensuite utilisé à différents buts.
+Par exemple:
+
+- Générer un rapport de test
+- Utiliser un artefact dans le job suivant
+- Générer des logs d'exécution de job
+
 ### Question 5
 
 #### Qu'est-ce que la couverture de code ? Pourquoi 100% n'est pas toujours souhaitable ? <!-- rumdl-disable-line MD013 -->
+
+Selon la [documentation de Sonar](https://www.sonarsource.com/resources/library/code-coverage/)
+La couverture de code consiste à évaluer quel à quel percentile le code source de
+l'application est testé.
+
+Le taux de 100% n'est pas souhaitable et Sonar recommande plutôt une base de 80%
+pour la majorité des projets, au-delà de ce palier, le résultat ne vaut peut-être
+pas le taux d'investissement.
 
 ## Partie 4 — Linting et cache
 
 ### Question 6
 
 #### Quel est le rôle d'un linter ? Pourquoi l'exécuter avant les tests dans le pipeline ? <!-- rumdl-disable-line MD013 -->
+
+Un linter a pour de lire le code qu'on lui fournit et de le comparer aux standards
+et normes porposés par les créateurs (ou la communauté) du langage.
+Il permet donc de respecter les meilleures pratiques et de repérer les erreurs
+lorsqu'on écrit du code.
+
+Il est mieux de l'exécuter avant les tests de pipeline afin d'éviter que
+cette dernière soit:
+
+1. Mise en erreur si le code est erronné
+2. Rejette le commit si elle a été configuré pour linter le code
 
 ### Question 7
 
