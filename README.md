@@ -1,3 +1,3 @@
-![CI](https://github.com/ReddSpade/mon-projet-flask/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/ReddSpade/m1-usine-logicielle-tp02/actions/workflows/ci.yml/badge.svg)
 
-# mon-projet-flask
+# m1-usine-logicielle-tp02
