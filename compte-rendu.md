@@ -99,10 +99,59 @@ cette dernière soit:
 
 #### Comparez les runners GitHub-hosted et self-hosted : avantages, inconvénients, et dans quel cas utiliser chacun <!-- rumdl-disable-line MD013 -->
 
+Selon les documentations officielles de Github sur les [runners Self-hosted](https://docs.github.com/en/actions/concepts/runners/self-hosted-runners)
+et [GitHub-hosted](https://docs.github.com/en/actions/concepts/runners/github-hosted-runners),
+ainsi que le [post de Stéphane Robert sur le sujet](https://blog.stephane-robert.info/docs/pipeline-cicd/github/runners/#ressources-externes), l'avantage principale des
+runners privés sont leur flexibilité et rapidité au détriment d'une sécurité variable.
+
+En effet les Runners GitHub sont payants si jamais le dépôt est privé, et les jobs
+ne peuvent pas durer plus de 6h.
+
+Il est alors recommandé de rester sur les runners GitHub si le projet est publique,
+utilise des ressources publiquement accessibles et/ou qu'on utilise des jobs standards.
+
 ### Question 9
 
 #### Décrivez le workflow complet qu'un développeur doit suivre pour intégrer du code quand la branche main est protégée <!-- rumdl-disable-line MD013 -->
 
+Pour un développeur, il doit d'abord avoir les droits de push sur ce dépôt.
+Ensuite, il doit intégrer son code dans une branche séparée et effectuer une PR.
+
+Afin de passer la PR, il doit avoir passé les tests imposés par la CI comme:
+
+- Tests de Lint via flake8
+- Tests Flask (si son code en dispose)
+
+Une fois ces tests passés, sa PR doit être vérifiée et approuvée par un autre
+collaborateur.
+
 ### Question 10
 
 #### Quelle action avez-vous trouvée et intégrée ? Expliquez son rôle, montrez la configuration YAML que vous avez ajoutée, et décrivez le résultat obtenu. Indiquez le lien vers la page de l'action dans la marketplace <!-- rumdl-disable-line MD013 -->
+
+L'action choisie est gh-action-pip-audit.
+Son intérêt principal est d'ajouter une couche de sécurisation sur les paquets
+pip utilisés.
+Il vient scanner un fichier `requirements.txt` afin de trouver des vulnérabilités
+dans les paquets.
+
+Configuration du job:
+
+```yaml
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Audit des dépendances
+        uses: pypa/gh-action-pip-audit@v1.1.0
+        with:
+          inputs: requirements.txt
+```
+
+Si le step `Audit des dépendances` se passe correctement, l'output affiché est
+`No known vulnerabilities found`.
+
+[Voici le lien vers la page action](https://github.com/marketplace/actions/gh-action-pip-audit).
