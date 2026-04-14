@@ -93,6 +93,16 @@ cette dernière soit:
 
 #### Comment fonctionne le cache dans GitHub Actions ? Que se passe-t-il quand requirements.txt change ? <!-- rumdl-disable-line MD013 -->
 
+Le cache permet d'accélérer l'exécution des pipelines, si activé pour des package
+python par exemple, il créera un Hash identifiant le fichier contenant les packages.
+
+Ensuite lorsque dans un autre job consécutif, on appelle le cache, le job cherchera
+le hash du cache, s'il le trouve il s'en servira, ce qui empêche de retélécharger
+chaque dépendence.
+
+Si le fichier `requirements.txt` change, le hash changera aussi et le cache devra
+être renouvellé.
+
 ## Partie 5 — Badge, protection de branche et pipeline final
 
 ### Question 8
